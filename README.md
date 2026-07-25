@@ -19,7 +19,7 @@ This repository tracks the active, hand-maintained Omarchy overrides in `~/.conf
 
 ## Workflow
 
-Commit before an Omarchy update:
+Commit each logical configuration change immediately as its own commit. Before an Omarchy update, confirm the tree is clean:
 
 ```sh
 git -C ~/.config status --short
