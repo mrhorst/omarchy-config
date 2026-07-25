@@ -488,15 +488,30 @@ auth_onepassword() {
   fi
 }
 
+configure_github_git_helper() {
+  local helper gh_path quoted_config quoted_gh host key
+  gh_path=$(command -v gh)
+  printf -v quoted_config '%q' "$CONFIG_DIR/gh"
+  printf -v quoted_gh '%q' "$gh_path"
+  helper="!/usr/bin/env GH_CONFIG_DIR=$quoted_config $quoted_gh auth git-credential"
+  for host in github.com gist.github.com; do
+    key="credential.https://${host}.helper"
+    git config --global --unset-all "$key" 2>/dev/null || true
+    git config --global --add "$key" ''
+    git config --global --add "$key" "$helper"
+  done
+}
+
 auth_github() {
   info "GitHub"
-  if timeout 20s gh auth status >/dev/null 2>&1; then
+  if timeout 20s env GH_CONFIG_DIR="$CONFIG_DIR/gh" gh auth status >/dev/null 2>&1; then
     ok "GitHub CLI authenticated"
+    configure_github_git_helper
   elif ((NON_INTERACTIVE)); then
     pending "Run: gh auth login --web --git-protocol https"
   elif ask "Authenticate GitHub now?" yes; then
-    gh auth login --web --git-protocol https </dev/tty
-    gh auth setup-git
+    GH_CONFIG_DIR="$CONFIG_DIR/gh" gh auth login --web --git-protocol https </dev/tty
+    configure_github_git_helper
   else
     pending "GitHub authentication skipped"
   fi
@@ -707,7 +722,7 @@ verify_all() {
   fi
 
   info "Accounts and live read-only probes"
-  check "GitHub authenticated" timeout 20s gh auth status
+  check "GitHub authenticated" timeout 20s env GH_CONFIG_DIR="$CONFIG_DIR/gh" gh auth status
   check "Global Git author identity configured" bash -c '[[ -n "$(git config --global user.name)" && -n "$(git config --global user.email)" ]]'
   check "1Password authenticated" timeout 15s op whoami --format json
   check "Tailscale connected" bash -c 'tailscale status --json 2>/dev/null | jq -e '\''.BackendState == "Running"'\'''
