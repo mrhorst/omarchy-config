@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 ALLOWED = [
-    re.compile(r"^(?:\.gitignore|\.gitattributes|README\.md|install\.sh|restore-omarchy-config|\.githooks/pre-commit)$"),
+    re.compile(r"^(?:\.gitignore|\.gitattributes|README\.md|install\.sh|bootstrap\.sh|restore-omarchy-config|\.githooks/pre-commit)$"),
     re.compile(r"^hypr/[^/]+\.conf$"),
     re.compile(r"^walker/config\.toml$"),
     re.compile(r"^waybar/(?:config\.jsonc|style\.css)$"),

@@ -5,6 +5,7 @@
 !/.gitattributes
 !/README.md
 !/install.sh
+!/bootstrap.sh
 !/restore-omarchy-config
 
 !/.githooks/

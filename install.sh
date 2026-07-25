@@ -5,13 +5,32 @@ REPO_URL="${OMARCHY_CONFIG_REPO_URL:-https://github.com/mrhorst/omarchy-config.g
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy-config"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
+RUN_BOOTSTRAP=0
+
+if [[ ${1:-} == --bootstrap ]]; then
+  RUN_BOOTSTRAP=1
+  shift
+fi
+if (($#)); then
+  printf 'Unknown installer argument: %s\n' "$1" >&2
+  exit 2
+fi
 
 mkdir -p "$CONFIG_DIR" "$STATE_DIR/backups"
 chmod 700 "$STATE_DIR" "$STATE_DIR/backups"
 
 if git -C "$CONFIG_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  EXISTING_ORIGIN="$(git -C "$CONFIG_DIR" remote get-url origin 2>/dev/null || true)"
+  if [[ $EXISTING_ORIGIN != "$REPO_URL" ]]; then
+    printf 'Refusing to update %s: origin is %s, expected %s.\n' "$CONFIG_DIR" "${EXISTING_ORIGIN:-<missing>}" "$REPO_URL" >&2
+    exit 1
+  fi
   if [ -x "$CONFIG_DIR/restore-omarchy-config" ]; then
-    exec "$CONFIG_DIR/restore-omarchy-config"
+    "$CONFIG_DIR/restore-omarchy-config"
+    if ((RUN_BOOTSTRAP)); then
+      exec "$CONFIG_DIR/bootstrap.sh" all
+    fi
+    exit 0
   fi
   printf 'An existing Git repository was found at %s, but its restore helper is missing.\n' "$CONFIG_DIR" >&2
   exit 1
@@ -45,3 +64,7 @@ command -v waybar >/dev/null 2>&1 && pkill -SIGUSR2 waybar >/dev/null 2>&1 || tr
 
 printf 'Omarchy configuration installed in %s\n' "$CONFIG_DIR"
 printf 'Previous versions of replaced files, if any, are in %s\n' "$BACKUP_DIR"
+
+if ((RUN_BOOTSTRAP)); then
+  exec "$CONFIG_DIR/bootstrap.sh" all
+fi
