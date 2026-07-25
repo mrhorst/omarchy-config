@@ -1,14 +1,14 @@
 # Omarchy configuration
 
-This repository tracks the active, hand-maintained Omarchy overrides in `~/.config` without copying them elsewhere.
+Public, portable backup of the hand-maintained Omarchy overrides used in `~/.config`.
 
 ## Safety model
 
 - Everything is ignored unless explicitly allowlisted in `.gitignore`.
-- Runtime state, caches, backups, screenshots, themes, credentials, and the rest of `~/.config` are excluded.
+- Runtime state, caches, backups, screenshots, downloaded themes, credentials, and unrelated application configuration are excluded.
 - The pre-commit hook rejects unapproved paths, binary files, oversized files, likely credentials, email addresses, fixed IP addresses, and user-specific absolute home paths.
 - Do not use `git add -f` to bypass the allowlist.
-- This repository is local-only until a separately audited **private** remote is explicitly created.
+- Every push should pass both the pre-commit check and a full-history privacy audit.
 
 ## Tracked scope
 
@@ -16,25 +16,38 @@ This repository tracks the active, hand-maintained Omarchy overrides in `~/.conf
 - `waybar/config.jsonc`, `waybar/style.css`, and `waybar/scripts/*.{py,sh}`
 - `walker/config.toml`
 - `omarchy/current/theme.name`
+- The safety hook and restore/install helpers
 
-## Workflow
+## Daily workflow
 
-Commit each logical configuration change immediately as its own commit. Before an Omarchy update, confirm the tree is clean:
+Commit and push each logical configuration change immediately:
 
 ```sh
 git -C ~/.config status --short
 git -C ~/.config add -u
 git -C ~/.config commit -m "config: describe the change"
+git -C ~/.config push
 ```
 
-After an update:
+## Restore after an Omarchy update
+
+Run:
 
 ```sh
-git -C ~/.config status
-git -C ~/.config diff
+~/.config/restore-omarchy-config
 ```
 
-Restore an accidentally changed file:
+The helper fetches `origin/main`, saves uncommitted tracked changes as a private local patch, preserves unpushed commits on a backup branch, resets tracked configuration to the public canonical version, and reloads Hyprland and Waybar. Ignored application data is untouched.
+
+## Install on a fresh Omarchy system
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/mrhorst/omarchy-config/main/install.sh | bash
+```
+
+The installer backs up only files that the repository will replace, installs the repository directly into `~/.config`, enables the safety hook, and reloads Hyprland and Waybar. Unrelated configuration remains untouched.
+
+Restore one accidentally changed file without resetting everything:
 
 ```sh
 git -C ~/.config restore path/to/file
