@@ -34,7 +34,7 @@ while IFS= read -r -d '' path; do
     mkdir -p "$BACKUP_DIR/$(dirname "$path")"
     cp -a "$source_path" "$BACKUP_DIR/$path"
   fi
-done < <(git -C "$TEMP_DIR/repo" ls-files -z)
+done < <(git -C "$TEMP_DIR/repo" ls-tree -r --name-only -z HEAD)
 
 mv "$TEMP_DIR/repo/.git" "$CONFIG_DIR/.git"
 git -C "$CONFIG_DIR" reset --hard HEAD
