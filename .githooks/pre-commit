@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Fail closed when staged Omarchy config looks unsafe to publish."""
+
+from __future__ import annotations
+
+import re
+import subprocess
+import sys
+
+ALLOWED = [
+    re.compile(r"^(?:\.gitignore|\.gitattributes|README\.md|\.githooks/pre-commit)$"),
+    re.compile(r"^hypr/[^/]+\.conf$"),
+    re.compile(r"^walker/config\.toml$"),
+    re.compile(r"^waybar/(?:config\.jsonc|style\.css)$"),
+    re.compile(r"^waybar/scripts/[^/]+\.(?:py|sh)$"),
+    re.compile(r"^omarchy/current/theme\.name$"),
+]
+
+SENSITIVE = {
+    "private key": re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----"),
+    "credential-bearing URL": re.compile(rb"https?://[^\s/:]+:[^\s/@]+@"),
+    "GitHub token": re.compile(rb"\b(?:ghp|github_pat)_[A-Za-z0-9_]{20,}\b"),
+    "AWS access key": re.compile(rb"\bAKIA[0-9A-Z]{16}\b"),
+    "bearer token": re.compile(rb"(?i)\bBearer\s+[A-Za-z0-9._~+\-/=]{16,}"),
+    "secret assignment": re.compile(
+        rb"(?i)(?:api[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|password)"
+        rb"\s*[:=]\s*[\"']?[^\s\"']{8,}"
+    ),
+    "email address": re.compile(rb"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"),
+    "fixed IPv4 address": re.compile(rb"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])"),
+    "user-specific home path": re.compile(rb"/home/[A-Za-z0-9._-]+/"),
+}
+
+
+def git(*args: str) -> bytes:
+    return subprocess.check_output(["git", *args])
+
+
+def main() -> int:
+    paths = [p.decode() for p in git("diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z").split(b"\0") if p]
+    errors: list[str] = []
+
+    for path in paths:
+        if not any(pattern.fullmatch(path) for pattern in ALLOWED):
+            errors.append(f"{path}: path is not allowlisted")
+            continue
+
+        data = git("show", f":{path}")
+        if len(data) > 512_000:
+            errors.append(f"{path}: file exceeds 500 KiB")
+            continue
+        if b"\0" in data:
+            errors.append(f"{path}: binary content is not allowed")
+            continue
+
+        for label, pattern in SENSITIVE.items():
+            if pattern.search(data):
+                errors.append(f"{path}: possible {label}")
+
+    if errors:
+        print("Commit blocked by the Omarchy configuration safety hook:", file=sys.stderr)
+        for error in errors:
+            print(f"  - {error}", file=sys.stderr)
+        print("No matched values were printed.", file=sys.stderr)
+        return 1
+
+    print(f"Omarchy safety check passed ({len(paths)} staged files).")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
