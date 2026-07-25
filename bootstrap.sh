@@ -59,7 +59,9 @@ while (($#)); do
   shift
 done
 
-mkdir -p "$STATE_DIR" "$LOCAL_BIN"
+if ((DRY_RUN == 0)); then
+  mkdir -p "$STATE_DIR" "$LOCAL_BIN"
+fi
 umask 077
 
 info() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
@@ -185,7 +187,7 @@ install_gog() {
 
   api=https://api.github.com/repos/openclaw/gogcli/releases/latest
   if ((DRY_RUN)); then
-    printf '  + download latest signed-checksum release from %s\n' "$api"
+    printf '  + download latest checksum-verified release from %s\n' "$api"
     return
   fi
 
@@ -310,6 +312,12 @@ install_hermes() {
   info "Installing Hermes Agent"
   if have hermes; then
     ok "Hermes Agent already installed"
+    return
+  fi
+  if ((DRY_RUN)); then
+    printf '  + curl -fsSL --retry 3 %q -o %q\n' \
+      https://hermes-agent.nousresearch.com/install.sh "$STATE_DIR/hermes-install.XXXXXX"
+    printf '  + bash %q --skip-setup\n' "$STATE_DIR/hermes-install.XXXXXX"
     return
   fi
   local installer
@@ -757,13 +765,26 @@ verify_all() {
   fi
 }
 
-case "$MODE" in
-install) install_all ;;
-auth) auth_all ;;
-verify) verify_all ;;
-all)
-  install_all
-  auth_all
-  verify_all
-  ;;
-esac
+if ((DRY_RUN)); then
+  case "$MODE" in
+  install) install_all ;;
+  all)
+    install_all
+    warn "Dry-run skips authentication and verification because they perform live account probes."
+    ;;
+  auth | verify)
+    warn "Dry-run performs no authentication or live verification."
+    ;;
+  esac
+else
+  case "$MODE" in
+  install) install_all ;;
+  auth) auth_all ;;
+  verify) verify_all ;;
+  all)
+    install_all
+    auth_all
+    verify_all
+    ;;
+  esac
+fi
