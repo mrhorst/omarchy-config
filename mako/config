@@ -34,3 +34,8 @@ border-color=#ef4444
 
 [app-name=HermesVoice actionable]
 on-button-left=invoke-default-action
+
+# Mako does not render notification actions as visible buttons. During capture,
+# use the whole card as Send and right-click it to invoke the Cancel action.
+[app-name=HermesVoice summary="●  LISTENING" actionable]
+on-button-right=invoke-action cancel
