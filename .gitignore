@@ -20,6 +20,10 @@
 /walker/*
 !/walker/config.toml
 
+!/mako/
+/mako/*
+!/mako/config
+
 !/waybar/
 /waybar/*
 !/waybar/config.jsonc

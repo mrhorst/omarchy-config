@@ -1,0 +1,36 @@
+# Keep Omarchy's active theme, then override only rich AI usage reports.
+include=~/.config/omarchy/current/theme/mako.ini
+
+[app-name=AIUsage]
+width=480
+height=420
+default-timeout=5000
+format=<b>%s</b>\n%b
+
+# Super+H voice flow only. The dedicated app-name keeps this card independent
+# from ordinary Hermes, system, and application notifications.
+[app-name=HermesVoice]
+width=520
+height=260
+margin=10
+padding=18,20
+border-size=3
+border-radius=14
+border-color=#a78bfa
+progress-color=over #a78bfa28
+background-color=#111118
+text-color=#f4f4f5
+font=sans-serif 14px
+icons=1
+max-icon-size=48
+icon-border-radius=10
+format=<b>%s</b>\n%b
+text-alignment=left
+default-timeout=0
+actions=1
+
+[app-name=HermesVoice urgency=critical]
+border-color=#ef4444
+
+[app-name=HermesVoice actionable]
+on-button-left=invoke-default-action

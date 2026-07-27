@@ -14,6 +14,7 @@ Public, portable backup of the hand-maintained Omarchy overrides used in `~/.con
 ## Tracked scope
 
 - `hypr/*.conf`
+- `mako/config`
 - `waybar/config.jsonc`, `waybar/style.css`, and `waybar/scripts/*.{py,sh}`
 - `walker/config.toml`
 - `omarchy/current/theme.name`
