@@ -38,3 +38,9 @@
 !/omarchy/current/
 /omarchy/current/*
 !/omarchy/current/theme.name
+
+!/pipewire/
+/pipewire/*
+!/pipewire/pipewire-pulse.conf.d/
+/pipewire/pipewire-pulse.conf.d/*
+!/pipewire/pipewire-pulse.conf.d/10-switch-on-connect.conf

@@ -15,6 +15,7 @@ ALLOWED = [
     re.compile(r"^waybar/(?:config\.jsonc|style\.css)$"),
     re.compile(r"^waybar/scripts/[^/]+\.(?:py|sh)$"),
     re.compile(r"^omarchy/current/theme\.name$"),
+    re.compile(r"^pipewire/pipewire-pulse\.conf\.d/[^/]+\.conf$"),
 ]
 
 SENSITIVE = {
