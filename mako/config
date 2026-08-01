@@ -39,3 +39,22 @@ on-button-left=invoke-default-action
 # use the whole card as Send and right-click it to invoke the Cancel action.
 [app-name=HermesVoice summary="●  LISTENING" actionable]
 on-button-right=invoke-action cancel
+
+# Water reminders open a dedicated amount picker. Mako cannot embed sliders,
+# so left-click invokes the popup and right-click remains a clean dismissal.
+[app-name=HermesHealth]
+width=390
+height=180
+padding=16,18
+border-size=3
+border-radius=14
+border-color=#48b7a8
+background-color=#111618
+text-color=#f5f7f6
+font=sans-serif 13px
+format=<b>%s</b>\n%b
+actions=1
+
+[app-name=HermesHealth actionable]
+on-button-left=invoke-default-action
+on-button-right=dismiss
