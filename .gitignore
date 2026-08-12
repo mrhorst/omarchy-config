@@ -7,6 +7,8 @@
 !/install.sh
 !/bootstrap.sh
 !/restore-omarchy-config
+!/QUATTRO-UPGRADE.md
+!/user-dirs.dirs
 
 !/.githooks/
 /.githooks/*
