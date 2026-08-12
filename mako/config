@@ -4,6 +4,10 @@ include=~/.config/omarchy/current/theme/mako.ini
 # >>> health-log desktop integration >>>
 include=~/.config/health-log/desktop/mako.conf
 # <<< health-log desktop integration <<<
+# >>> scanned-docs status integration >>>
+include=~/.config/scanned-docs/desktop/mako.conf
+# <<< scanned-docs status integration <<<
+
 [app-name=AIUsage]
 width=480
 height=420

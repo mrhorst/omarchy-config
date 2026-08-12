@@ -354,7 +354,6 @@ install_webapps() {
     return 1
   }
   local icons=https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png
-  ensure_webapp ChatGPT https://chatgpt.com "$icons/chatgpt.png"
   ensure_webapp Grok https://grok.com "$icons/grok.png"
   ensure_webapp HEY https://app.hey.com HEY.png
   ensure_webapp GitHub https://github.com "$icons/github-light.png"
@@ -746,7 +745,7 @@ verify_all() {
   fi
 
   info "Web apps"
-  for name in ChatGPT Grok HEY GitHub "Google Maps" "Google Drive"; do
+  for name in Grok HEY GitHub "Google Maps" "Google Drive"; do
     if [[ -f $HOME/.local/share/applications/$name.desktop ]]; then
       ok "$name launcher present"
     else
