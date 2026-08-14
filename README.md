@@ -1,24 +1,40 @@
 # Omarchy configuration
 
-Public, portable backup of the hand-maintained Omarchy overrides used in `~/.config`, plus a re-runnable fresh-workstation bootstrap.
+Public, portable backup of the hand-maintained Omarchy Quattro overrides used in `~/.config`, plus a re-runnable fresh-workstation bootstrap.
 
 ## Safety model
 
 - Everything is ignored unless explicitly allowlisted in `.gitignore`.
-- Runtime state, caches, backups, screenshots, downloaded themes, credentials, OAuth files, and unrelated application configuration are excluded.
+- Runtime state, caches, migration backups, screenshots, credentials, OAuth files, and unrelated application configuration are excluded.
 - The pre-commit hook rejects unapproved paths, binary files, oversized files, likely credentials, email addresses, fixed IP addresses, and user-specific absolute home paths.
-- The bootstrap installs public software, creates launchers, and guides interactive authentication. It never embeds or publishes credentials.
-- Do not use `git add -f` to bypass the allowlist.
+- The bootstrap installs public software and guides interactive authentication. It never embeds or publishes credentials.
+- Never use `git add -f` to bypass the allowlist.
 - Every push should pass both the pre-commit check and a full-history privacy audit.
 
 ## Tracked scope
 
-- `hypr/*.conf`
-- `mako/config`
-- `waybar/config.jsonc`, `waybar/style.css`, and `waybar/scripts/*.{py,sh}`
-- `walker/config.toml`
-- `omarchy/current/theme.name`
-- The safety hook, configuration recovery helper, and workstation bootstrap
+- Active Hyprland Lua entry points and overrides in `hypr/*.lua`
+- Supported standalone Hyprland-adjacent files: `hypr/hyprsunset.conf` and `hypr/xdph.conf`
+- Omarchy Shell layout and font overrides in `omarchy/shell.{json,toml}`
+- The user-owned `mat.system-health` Omarchy Shell plugin
+- PipeWire overrides and the organized XDG user-directory map
+- Safety hooks, recovery/install helpers, and the workstation bootstrap
+
+Waybar, Walker, Mako, Hypridle, Hyprlock, and legacy Hyprland `.conf` files are intentionally not tracked because Quattro retired that configuration stack. Their pre-migration versions remain available in Git history and Omarchy's timestamped local migration backups.
+
+## Current machine behavior
+
+- `DP-3`: left, `1920x1080@144`, scale `1`
+- `DVI-D-1`: right, `1920x1080@144`, scale `1`
+- `HDMI-A-1`: disabled
+- `SUPER + CTRL + F12`: Health dashboard
+- `SUPER + CTRL + F11`: DevLab
+- `SUPER + H` / `CTRL + ESCAPE`: start/cancel Hermes voice capture
+- `SUPER + SHIFT + A`: packaged ChatGPT app
+- `SUPER + SHIFT + W`: Typora
+- The native shell bar includes media, microphone, Tailscale, agent usage, and a user-owned CPU/GPU/system-health widget.
+
+See [`QUATTRO-UPGRADE.md`](QUATTRO-UPGRADE.md) for the migration record and intentional compatibility decisions.
 
 ## Daily workflow
 
@@ -26,9 +42,9 @@ Commit and push each logical configuration change immediately:
 
 ```sh
 git -C ~/.config status --short
-git -C ~/.config add -u
+git -C ~/.config add -- path/to/approved/file
 git -C ~/.config commit -m "config: describe the change"
-git -C ~/.config push
+git -C ~/.config push origin main
 ```
 
 ## Restore after an Omarchy update
@@ -39,7 +55,7 @@ Run:
 ~/.config/restore-omarchy-config
 ```
 
-The helper fetches `origin/main`, saves uncommitted tracked changes as a private local patch, preserves unpushed commits on a backup branch, resets tracked configuration to the public canonical version, and reloads Hyprland and Waybar. Ignored application data is untouched.
+The helper fetches `origin/main`, saves uncommitted tracked changes as a private local patch, preserves unpushed commits on a backup branch, resets tracked configuration to the public canonical version, reloads Hyprland, prevents a leftover Mako service from taking the notification bus, and restarts Omarchy Shell. Ignored application data and migration backups are untouched.
 
 ## Fresh Omarchy workstation
 
@@ -51,18 +67,7 @@ The one-command path restores this repository, installs the workstation tools, t
 curl -fsSL https://raw.githubusercontent.com/mrhorst/omarchy-config/main/install.sh | bash -s -- --bootstrap
 ```
 
-It installs or verifies:
-
-- Git and authenticated GitHub CLI support
-- 1Password desktop app and CLI
-- Tailscale
-- OpenAI Codex CLI and ChatGPT authentication
-- xAI Grok CLI and Grok authentication
-- CodexBar CLI with Codex and Grok enabled
-- HEY CLI
-- `gog` for Google Workspace, with Gmail intentionally read-only
-- Hermes Agent
-- ChatGPT, Grok, HEY, GitHub, Google Maps, and Google Drive web-app launchers
+It installs or verifies Git/GitHub CLI, 1Password, Tailscale, Codex, Grok, CodexBar, HEY CLI, Google Workspace CLI support, Hermes Agent, and the configured web-app launchers.
 
 The workflow is resumable:
 
@@ -78,14 +83,11 @@ Important boundaries:
 
 - Browser, OAuth, and device-code approvals remain interactive by design.
 - Secret values are accepted only through provider login pages or hidden terminal input and are written only to private provider/Hermes files.
-- Strict verification treats the scoped unattended 1Password token as required while Hermes setup is enabled; the token is validated live and its private env file is forced to mode `0600`.
 - `--non-interactive` skips account prompts, but system installation first requires a cached non-prompting sudo session (`sudo -v`) or `OMARCHY_BOOTSTRAP_SKIP_SYSTEM=1`.
 - The script does not copy `~/.hermes`, sessions, memories, cron jobs, OAuth databases, browser profiles, or the Obsidian vault. Restore those private data sets from their canonical backup/sync path separately.
-- Do not start a second Hermes gateway with an existing Telegram or Discord token until gateway ownership is confirmed.
+- Do not start a second Hermes gateway with an existing messaging token until gateway ownership is confirmed.
 
 ## Config-only install
-
-To restore just the public configuration without installing applications:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/mrhorst/omarchy-config/main/install.sh | bash

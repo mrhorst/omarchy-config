@@ -105,7 +105,7 @@ require_omarchy() {
     fail "Run this bootstrap as your normal user; it invokes sudo only for system packages."
     exit 1
   fi
-  if [[ ! -d $HOME/.local/share/omarchy ]]; then
+  if [[ ! -d /usr/share/omarchy && ! -d $HOME/.local/share/omarchy ]]; then
     fail "Omarchy was not detected. Install Omarchy first, then rerun this script."
     exit 1
   fi

@@ -60,7 +60,11 @@ git -C "$CONFIG_DIR" reset --hard HEAD
 git -C "$CONFIG_DIR" config core.hooksPath .githooks
 
 command -v hyprctl >/dev/null 2>&1 && hyprctl reload >/dev/null 2>&1 || true
-command -v waybar >/dev/null 2>&1 && pkill -SIGUSR2 waybar >/dev/null 2>&1 || true
+if systemctl --user list-unit-files mako.service >/dev/null 2>&1; then
+  systemctl --user disable --now mako.service >/dev/null 2>&1 || true
+  systemctl --user mask mako.service >/dev/null 2>&1 || true
+fi
+command -v omarchy >/dev/null 2>&1 && omarchy restart shell >/dev/null 2>&1 || true
 
 printf 'Omarchy configuration installed in %s\n' "$CONFIG_DIR"
 printf 'Previous versions of replaced files, if any, are in %s\n' "$BACKUP_DIR"
