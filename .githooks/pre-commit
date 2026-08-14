@@ -11,12 +11,9 @@ ALLOWED = [
     re.compile(
         r"^(?:\.gitignore|\.gitattributes|README\.md|QUATTRO-UPGRADE\.md|user-dirs\.dirs|install\.sh|bootstrap\.sh|restore-omarchy-config|\.githooks/pre-commit)$"
     ),
-    re.compile(r"^hypr/[^/]+\.conf$"),
-    re.compile(r"^mako/config$"),
-    re.compile(r"^walker/config\.toml$"),
-    re.compile(r"^waybar/(?:config\.jsonc|style\.css)$"),
-    re.compile(r"^waybar/scripts/[^/]+\.(?:py|sh)$"),
-    re.compile(r"^omarchy/current/theme\.name$"),
+    re.compile(r"^hypr/(?:\.luarc\.json|[^/]+\.lua|hyprsunset\.conf|xdph\.conf)$"),
+    re.compile(r"^omarchy/shell\.(?:json|toml)$"),
+    re.compile(r"^omarchy/plugins/mat\.system-health/(?:manifest\.json|SystemHealth\.qml|system-health\.py)$"),
     re.compile(r"^pipewire/pipewire-pulse\.conf\.d/[^/]+\.conf$"),
 ]
 

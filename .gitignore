@@ -16,30 +16,22 @@
 
 !/hypr/
 /hypr/*
-!/hypr/*.conf
-
-!/walker/
-/walker/*
-!/walker/config.toml
-
-!/mako/
-/mako/*
-!/mako/config
-
-!/waybar/
-/waybar/*
-!/waybar/config.jsonc
-!/waybar/style.css
-!/waybar/scripts/
-/waybar/scripts/*
-!/waybar/scripts/*.py
-!/waybar/scripts/*.sh
+!/hypr/.luarc.json
+!/hypr/*.lua
+!/hypr/hyprsunset.conf
+!/hypr/xdph.conf
 
 !/omarchy/
 /omarchy/*
-!/omarchy/current/
-/omarchy/current/*
-!/omarchy/current/theme.name
+!/omarchy/shell.json
+!/omarchy/shell.toml
+!/omarchy/plugins/
+/omarchy/plugins/*
+!/omarchy/plugins/mat.system-health/
+/omarchy/plugins/mat.system-health/*
+!/omarchy/plugins/mat.system-health/manifest.json
+!/omarchy/plugins/mat.system-health/SystemHealth.qml
+!/omarchy/plugins/mat.system-health/system-health.py
 
 !/pipewire/
 /pipewire/*
