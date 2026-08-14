@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "mat.system-health",
+  "name": "System health",
+  "version": "1.0.0",
+  "author": "Mat Horst",
+  "description": "CPU, memory, disk, and NVIDIA health at a glance",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "SystemHealth.qml"
+  },
+  "barWidget": {
+    "displayName": "System health",
+    "description": "CPU, memory, disk, and NVIDIA utilization and temperature",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

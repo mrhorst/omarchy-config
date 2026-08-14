@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "idle": {
+    "screensaver": 300,
+    "lock": 302
+  },
+  "bar": {
+    "position": "top",
+    "transparent": false,
+    "centerAnchor": "omarchy.clock",
+    "layout": {
+      "left": [
+        {
+          "id": "omarchy.menu"
+        },
+        {
+          "id": "omarchy.media"
+        }
+      ],
+      "center": [
+        {
+          "id": "omarchy.workspaces"
+        },
+        {
+          "id": "omarchy.clock"
+        },
+        {
+          "id": "omarchy.weather"
+        },
+        {
+          "id": "omarchy.keyboard-layout"
+        }
+      ],
+      "right": [
+        {
+          "id": "omarchy.system-update"
+        },
+        {
+          "id": "omarchy.tray"
+        },
+        {
+          "id": "omarchy.tailscale"
+        },
+        {
+          "id": "omarchy.agents",
+          "includeAgents": [
+            "claude",
+            "codex",
+            "fireworks"
+          ]
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "omarchy.network"
+        },
+        {
+          "id": "omarchy.audio"
+        },
+        {
+          "id": "omarchy.microphone"
+        },
+        {
+          "id": "mat.system-health"
+        },
+        {
+          "id": "omarchy.monitor"
+        },
+        {
+          "id": "omarchy.power"
+        }
+      ]
+    }
+  },
+  "plugins": []
+}
