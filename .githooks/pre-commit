@@ -14,6 +14,7 @@ ALLOWED = [
     re.compile(r"^hypr/(?:\.luarc\.json|[^/]+\.lua|hyprsunset\.conf|xdph\.conf)$"),
     re.compile(r"^omarchy/shell\.(?:json|toml)$"),
     re.compile(r"^omarchy/plugins/mat\.system-health/(?:manifest\.json|SystemHealth\.qml|system-health\.py)$"),
+    re.compile(r"^systemd/user/app-bluebubbles\x40autostart\.service\.d/override\.conf$"),
     re.compile(r"^pipewire/pipewire-pulse\.conf\.d/[^/]+\.conf$"),
 ]
 

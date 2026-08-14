@@ -33,6 +33,14 @@
 !/omarchy/plugins/mat.system-health/SystemHealth.qml
 !/omarchy/plugins/mat.system-health/system-health.py
 
+!/systemd/
+/systemd/*
+!/systemd/user/
+/systemd/user/*
+!/systemd/user/app-bluebubbles\@autostart.service.d/
+/systemd/user/app-bluebubbles\@autostart.service.d/*
+!/systemd/user/app-bluebubbles\@autostart.service.d/override.conf
+
 !/pipewire/
 /pipewire/*
 !/pipewire/pipewire-pulse.conf.d/
