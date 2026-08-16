@@ -1,0 +1,14 @@
+[Unit]
+Description=Keep Omarchy awake while Stremio is fullscreen
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/omarchy/stremio-idle-guard.py
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=graphical-session.target

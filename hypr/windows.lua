@@ -6,6 +6,10 @@ o.window("^Hermes$", { workspace = "3" })
 o.window("^[Bb]uzz-[Dd]esktop$", { workspace = "4" })
 o.window("^chrome-x\\.com__-Default$", { workspace = "5" })
 
+-- Stremio does not publish an idle inhibitor itself. Keep the screen awake only
+-- while its native Wayland window is fullscreen.
+o.window("^com\\.stremio\\.Stremio$", { idle_inhibit = "fullscreen" })
+
 local function popup(title, width, height)
   o.window({ title = title }, {
     float = true,

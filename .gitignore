@@ -25,6 +25,7 @@
 /omarchy/*
 !/omarchy/shell.json
 !/omarchy/shell.toml
+!/omarchy/stremio-idle-guard.py
 !/omarchy/plugins/
 /omarchy/plugins/*
 !/omarchy/plugins/mat.system-health/
@@ -38,6 +39,7 @@
 !/systemd/user/
 /systemd/user/*
 !/systemd/user/app-bluebubbles\@autostart.service.d/
+!/systemd/user/stremio-idle-guard.service
 /systemd/user/app-bluebubbles\@autostart.service.d/*
 !/systemd/user/app-bluebubbles\@autostart.service.d/override.conf
 
